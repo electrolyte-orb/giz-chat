@@ -1,0 +1,19 @@
+{
+	"name": "giz-chat",
+	"version": "1.0.0",
+	"description": "A really robust and simple chat webapp.",
+	"main": "server.js",
+	"scripts": {
+		"dev": "nodemon server.js",
+		"start": "node server.js"
+	},
+	"author": "Giz Chat Services",
+	"license": "ISC",
+	"dependencies": {
+		"express": "^4.17.1",
+		"socket.io": "^2.3.0"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.4"
+	}
+}

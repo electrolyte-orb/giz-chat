@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>chat app</title>
+
+        <style>
+			* {
+				font-family: "Bw Quinta Pro";
+				outline: none;
+				
+			}
+			body {
+				margin: 0
+			}
+			li {
+				padding: 10px;
+				clear: both
+			}
+			li.you {
+				background: #ebebeb;
+				display: inline-block;
+				float: right
+			}
+                li.chat-msg {
+                    background: #808080;
+                    color: white;
+                    display: inline-block;
+					float: left;
+                }
+			ul {
+				list-style: none;
+				padding: 10px;
+				margin-bottom: 50px;
+				overflow: auto;
+				height: 100%;
+				display: block;
+			}
+			form {
+				display: flex;
+				position: fixed;
+				bottom: 0;
+				width: 100%
+			}
+			input {
+				padding: 10px;
+				width: 180%
+			}
+            button {
+                padding: 10px; width: 20%
+            }
+		</style>
+	</head>
+	<body>
+        <h3 id="users"></h3>
+        <ul id="chat-msgs">
+        </ul>
+        <form id="formChat" action="">
+            <input autocomplete="off" id="inp" type="text" name="chat-msg" value="" />
+            <button id="btn" type="submit">Send</button>
+		</form>
+		<script src="/socket.io/socket.io.js"></script>
+		<script>
+			const socket = io();
+			let ul = document.getElementById("chat-msgs")
+
+			socket.on("chat-msg", (data) => {
+				let li = document.createElement("li")
+				li.innerHTML = `${data.user}: ${data.msg}`
+				li.className = "chat-msg"
+				ul.appendChild(li)
+			})
+
+			const name = prompt("Type in your name", "Name")
+			if (name) {
+				socket.emit("newUsr", name)
+
+				window.user = name
+			}
+
+			let formChat = document.getElementById("formChat")
+			let inp = document.getElementById("inp")
+			let btn = document.getElementById("btn")
+
+			formChat.addEventListener("submit", e => {
+
+				e.preventDefault()
+				socket.emit("chat-msg", {
+					user: window.user,
+					msg: inp.value
+				})
+
+				let li = document.createElement("li")
+				li.innerHTML = "you: " + inp.value;
+				li.className = "you"
+				ul.appendChild(li)
+				inp.value = ""
+            })
+		</script>
+	</body>
+</html>
